@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Memory Game (1 Player)</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+    <div class="cosmic-bg">
+  <div class="stars"></div>
+  <div class="twinkle"></div>
+  <div class="shooting-stars"></div>
+</div>
+  <main class="app">
+    <header>
+      <div class="title">
+        <h1>Memory Game (1 Player)</h1>
+        <p>Flip two cards. Match pairs. Try for fewer moves and faster time.</p>
+      </div>
+
+      <div class="controls">
+        <button onclick="location.href='./index.html'">
+  Back to Menu
+</button>
+        <div class="pill">Moves: <strong id="moves">0</strong></div>
+        <div class="pill">Matches: <strong id="matches">0</strong>/<span id="totalPairs">0</span></div>
+        <div class="pill">Time: <strong id="time">0:00</strong></div>
+
+        <select id="difficulty">
+          <option value="4x3">Easy (12 cards)</option>
+          <option value="4x4" selected>Medium (16 cards)</option>
+          <option value="6x4">Hard (24 cards)</option>
+        </select>
+
+        <button id="newGame" type="button">New Game</button>
+      </div>
+    </header>
+
+    <section class="boardWrap">
+      <div id="board" class="board" aria-label="Memory board"></div>
+      <div class="toast">
+        <div id="msg" class="msg">Tip: your timer starts on your first flip.</div>
+        <button id="peek" type="button" title="Briefly reveal all cards once">Peek</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="./game.js"></script>
+</body>
+</html>

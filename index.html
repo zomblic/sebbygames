@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cosmic Word Games</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <!-- Keep your cosmic background -->
+  <div class="cosmic-bg">
+    <div class="nebula"></div>
+    <div class="stars" id="starsLayer"></div>
+    <div class="twinkle" id="twinkleLayer"></div>
+    <div class="shooting-stars"></div>
+    <div class="sparkles" id="sparklesLayer">
+        <div class="big-stars"></div>
+    </div>
+  </div>
+
+  <main class="app">
+    <header>
+      <div class="title">
+        <h1>Cosmic Word Games</h1>
+        <p>Choose a game mode.</p>
+      </div>
+      <div class="controls">
+        <button onclick="location.href='./memory.html'">Memory Match</button>
+        <button onclick="location.href='./decoding.html'">Syllable Decoding</button>
+        <button onclick="location.href='./hangman.html'">Hangman</button>
+      </div>
+    </header>
+
+    <section class="boardWrap">
+      <div class="toast">
+        <div class="msg">Tip: You can keep using the same dreamy cosmic background across all pages.</div>
+      </div>
+    </section>
+  </main>
+
+  <script src="./decoding.js"></script>
+</body>
+</html>

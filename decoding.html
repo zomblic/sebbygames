@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Syllable Decoding</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="cosmic-bg">
+    <div class="nebula"></div>
+    <div class="stars" id="starsLayer"></div>
+    <div class="twinkle" id="twinkleLayer"></div>
+    <div class="shooting-stars"></div>
+    <div class="sparkles" id="sparklesLayer"></div>
+  </div>
+
+  <main class="app">
+    <header>
+      <div class="title">
+        <h1>Syllable Decoding</h1>
+        <p>Click syllables to build the word. Then check your answer.</p>
+      </div>
+
+      <div class="controls">
+        <button onclick="location.href='./index.html'">Back to Menu</button>
+        <div class="pill">Score: <strong id="score">0</strong></div>
+        <button id="newPuzzle" type="button">New Word</button>
+        <label class="pill">
+  <input type="checkbox" id="decoysToggle" />
+  Decoys
+</label>
+        <select id="mode">
+  <option value="normal" selected>Normal</option>
+  <option value="nightmare">Nightmare 👁️</option>
+</select>
+      </div>
+    </header>
+
+    <section class="boardWrap">
+      <div class="toast">
+        <div id="clue" class="msg">Clue will appear here.</div>
+      </div>
+
+      <div class="decodeWrap">
+        <div class="answerRow">
+          <div class="label">Your word</div>
+          <div id="answer" class="answerBox"></div>
+        </div>
+
+        <div class="btnRow">
+          <button id="undo" type="button">Undo</button>
+          <button id="clear" type="button">Clear</button>
+          <button id="check" type="button">Check</button>
+        </div>
+
+        <div class="tilesRow">
+          <div class="label">Syllables</div>
+          <div id="tiles" class="tiles"></div>
+        </div>
+
+        <div class="toast">
+          <div id="msg" class="msg">Click syllables in order. You can undo or clear.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="./decoding.js"></script>
+</body>
+</html>

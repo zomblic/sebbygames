@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hangman</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="cosmic-bg">
+    <div class="nebula"></div>
+    <div class="stars" id="starsLayer"></div>
+    <div class="twinkle" id="twinkleLayer"></div>
+    <div class="shooting-stars"></div>
+    <div class="sparkles" id="sparklesLayer"></div>
+  </div>
+
+  <main class="app">
+    <header>
+      <div class="title">
+        <h1>Hangman</h1>
+        <p>Guess the iSEE-style vocabulary word before your lives run out.</p>
+      </div>
+
+      <div class="controls">
+        <button onclick="location.href='./index.html'">Back to Menu</button>
+        <div class="pill">Lives: <strong id="lives">6</strong></div>
+        <div class="pill">Wins: <strong id="wins">0</strong></div>
+        <button id="newWord" type="button">New Word</button>
+      </div>
+    </header>
+
+    <section class="boardWrap">
+      <div class="toast">
+        <div id="hint" class="msg">Hint will appear here.</div>
+      </div>
+
+      <div class="hangWrap">
+        <div id="word" class="hangWord" aria-label="Word"></div>
+
+        <div class="btnRow">
+          <button id="revealHint" type="button">Reveal Hint</button>
+          <button id="resetRound" type="button">Reset Round</button>
+        </div>
+
+        <div class="tilesRow">
+          <div class="label">Letters</div>
+          <div id="letters" class="letters"></div>
+        </div>
+
+        <div class="toast">
+          <div id="msg" class="msg">Click letters or use your keyboard.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="./hangman.js"></script>
+</body>
+</html>
