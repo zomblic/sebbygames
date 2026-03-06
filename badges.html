@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Badges</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div class="title">
+        <h1>Badge Collection</h1>
+        <p>Your cosmic trophy shelf.</p>
+      </div>
+      <div class="controls">
+        <button onclick="location.href='./index.html'">Back to Menu</button>
+      </div>
+    </header>
+
+    <section class="boardWrap">
+      <div id="badgeGrid" class="badge-grid"></div>
+    </section>
+  </main>
+
+  <script src="./badges.js"></script>
+  <script>
+    const badgeGrid = document.getElementById("badgeGrid");
+    const unlocked = getUnlockedBadges();
+
+    BADGES.forEach(badge => {
+      const isUnlocked = unlocked.includes(badge.id);
+
+      const card = document.createElement("div");
+      card.className = "badge-card" + (isUnlocked ? "" : " locked");
+
+      card.innerHTML = `
+        <img src="${badge.icon}" alt="${badge.name}">
+        <h3>${isUnlocked ? badge.name : "Locked"}</h3>
+        <p>${isUnlocked ? badge.description : "???"}</p>
+        <span class="badge-rarity">${badge.rarity}</span>
+      `;
+
+      badgeGrid.appendChild(card);
+    });
+  </script>
+</body>
+</html>
