@@ -218,23 +218,23 @@ function winCheck(){
   stopTimer();
   setMessage(`Victory! 🏁 Moves: ${moves} • Time: ${formatTime(elapsed)} • New Game to replay.`);
 
-  unlockBadge("memorySpark");
+  unlockBadge("memoryspark");
 
   const memoryWins = incrementStat("memoryWins");
   if(memoryWins >= 5){
-    unlockBadge("patternSeeker");
+    unlockBadge("patternseeker");
   }
 
   if(mismatchCount === 0){
-    unlockBadge("perfectRecall");
+    unlockBadge("perfectrecall");
   }
 
   if(elapsed < 60){
-    unlockBadge("lightningMind");
+    unlockBadge("lightningmind");
   }
 
   if(currentLevel === "sebby"){
-    unlockBadge("sebbyApproved");
+    unlockBadge("sebbyapproved");
 
     const sebbyWins = incrementStat("sebbyMemoryWins");
     if(sebbyWins >= 1){

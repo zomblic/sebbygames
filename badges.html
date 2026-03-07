@@ -29,7 +29,7 @@
     const unlocked = getUnlockedBadges();
 
     BADGES.forEach(badge => {
-      const isUnlocked = unlocked.includes(badge.id);
+      const isUnlocked = unlocked.includes(String(badge.id).trim().toLowerCase());
 
       const card = document.createElement("div");
       card.className = "badge-card" + (isUnlocked ? "" : " locked");

@@ -204,7 +204,7 @@ function endWin(){
 
   const hangmanWins = incrementStat("hangmanWins");
   if(hangmanWins >= 5){
-    unlockBadge("cosmicEscape");
+    unlockBadge("cosmicescape");
   }
 
   if(lives === 1){

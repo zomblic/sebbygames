@@ -21,7 +21,7 @@ const BADGES = [
     rarity: "rare"
   },
   {
-    id: "constellationMaker",
+    id: "constellationmaker",
     name: "Constellation Maker",
     description: "Unlock 10 badges.",
     icon: "./assets/badges/constellationMaker.png",
@@ -35,28 +35,28 @@ const BADGES = [
     rarity: "legendary"
   },
   {
-    id: "galacticChampion",
+    id: "galacticchampion",
     name: "Galactic Champion",
     description: "Unlock 20 badges.",
     icon: "./assets/badges/galacticChampion.png",
     rarity: "legendary"
   },
   {
-    id: "sebbysFavorite",
+    id: "sebbysfavorite",
     name: "Sebby's Favorite",
     description: "Unlock a secret Sebby-related achievement.",
     icon: "./assets/badges/sebbysFavorite.png",
     rarity: "legendary"
   },
   {
-    id: "luckyComet",
+    id: "luckycomet",
     name: "Lucky Comet",
     description: "Unlock a rare surprise badge.",
     icon: "./assets/badges/luckyComet.png",
     rarity: "epic"
   },
   {
-    id: "cosmicPatience",
+    id: "cosmicpatience",
     name: "Cosmic Patience",
     description: "Take a very long time to solve a puzzle.",
     icon: "./assets/badges/cosmicPatience.png",
@@ -105,7 +105,7 @@ const BADGES = [
     rarity: "epic"
   },
   {
-    id: "cosmicEscape",
+    id: "cosmicescape",
     name: "Cosmic Escape",
     description: "Win multiple hard Hangman rounds.",
     icon: "./assets/badges/cosmicEscape.png",
@@ -126,56 +126,56 @@ const BADGES = [
     rarity: "rare"
   },
   {
-    id: "jabberwockTamer",
+    id: "jabberwocktamer",
     name: "Jabberwock Tamer",
     description: "Solve one of the hardest weird words.",
     icon: "./assets/badges/jabberwockTamer.png",
     rarity: "legendary"
   },
   {
-    id: "morphologyMaster",
+    id: "morphologymaster",
     name: "Morphology Master",
     description: "Solve 25 decoding puzzles.",
     icon: "./assets/badges/morphologyMaster.png",
     rarity: "epic"
   },
   {
-    id: "SyllableScout",
+    id: "syllablescout",
     name: "Syllable Scout",
     description: "Solve your first decoding puzzle.",
     icon: "./assets/badges/SyllableScout.png",
     rarity: "common"
   },
   {
-    id: "patternSeeker",
+    id: "patternseeker",
     name: "Pattern Seeker",
     description: "Win 5 memory rounds.",
     icon: "./assets/badges/patternSeeker.png",
     rarity: "rare"
   },
   {
-    id: "lightningMind",
+    id: "lightningmind",
     name: "Lightning Mind",
     description: "Win memory in under 60 seconds.",
     icon: "./assets/badges/lightningMind.png",
     rarity: "epic"
   },
   {
-    id: "perfectRecall",
+    id: "perfectrecall",
     name: "Perfect Recall",
     description: "Win memory with 0 mismatches.",
     icon: "./assets/badges/perfectRecall.png",
     rarity: "epic"
   },
   {
-    id: "sebbyApproved",
+    id: "sebbyapproved",
     name: "Sebby Approved!",
     description: "Beat Sebby's Level.",
     icon: "./assets/badges/sebbyApproved.png",
     rarity: "legendary"
   },
   {
-    id: "memorySpark",
+    id: "memoryspark",
     name: "Memory Spark",
     description: "Win memory once.",
     icon: "./assets/badges/memorySpark.png",
@@ -183,41 +183,70 @@ const BADGES = [
   }
 ];
 
+function normalizeBadgeId(id) {
+  return String(id).trim().toLowerCase();
+}
 
 function getUnlockedBadges() {
-  return JSON.parse(localStorage.getItem("unlockedBadges") || "[]");
+  return JSON.parse(localStorage.getItem("unlockedBadges") || "[]")
+    .map(normalizeBadgeId);
 }
 
 function saveUnlockedBadges(badges) {
-  localStorage.setItem("unlockedBadges", JSON.stringify(badges));
+  const cleaned = [...new Set(badges.map(normalizeBadgeId))];
+  localStorage.setItem("unlockedBadges", JSON.stringify(cleaned));
 }
 
 function hasBadge(id) {
-  return getUnlockedBadges().includes(id);
+  return getUnlockedBadges().includes(normalizeBadgeId(id));
+}
+
+function getStats() {
+  return JSON.parse(localStorage.getItem("gameStats") || "{}");
+}
+
+function saveStats(stats) {
+  localStorage.setItem("gameStats", JSON.stringify(stats));
+}
+
+function incrementStat(statName, amount = 1) {
+  const stats = getStats();
+  stats[statName] = (stats[statName] || 0) + amount;
+  saveStats(stats);
+  return stats[statName];
+}
+
+function setStatMax(statName, value) {
+  const stats = getStats();
+  stats[statName] = Math.max(stats[statName] || 0, value);
+  saveStats(stats);
+  return stats[statName];
 }
 
 function unlockBadge(id) {
+  const normalizedId = normalizeBadgeId(id);
   const unlocked = getUnlockedBadges();
-  if (unlocked.includes(id)) return;
 
-  unlocked.push(id);
+  if (unlocked.includes(normalizedId)) return;
+
+  unlocked.push(normalizedId);
   saveUnlockedBadges(unlocked);
-  showBadgePopup(id);
+  showBadgePopup(normalizedId);
   checkMetaBadges();
 }
 
 function checkMetaBadges() {
   const unlocked = getUnlockedBadges();
 
-  if (unlocked.length >= 10 && !unlocked.includes("constellationMaker")) {
-    unlocked.push("constellationMaker");
+  if (unlocked.length >= 10 && !unlocked.includes("constellationmaker")) {
+    unlocked.push("constellationmaker");
   }
 
-  if (unlocked.length >= 20 && !unlocked.includes("galacticChampion")) {
-    unlocked.push("galacticChampion");
+  if (unlocked.length >= 20 && !unlocked.includes("galacticchampion")) {
+    unlocked.push("galacticchampion");
   }
 
-  if (unlocked.length === BADGES.length - 1 && !unlocked.includes("masterofwords")) {
+  if (unlocked.length >= BADGES.length - 1 && !unlocked.includes("masterofwords")) {
     unlocked.push("masterofwords");
   }
 
@@ -225,7 +254,8 @@ function checkMetaBadges() {
 }
 
 function showBadgePopup(id) {
-  const badge = BADGES.find(b => b.id === id);
+  const normalizedId = normalizeBadgeId(id);
+  const badge = BADGES.find(b => normalizeBadgeId(b.id) === normalizedId);
   if (!badge) return;
 
   const popup = document.createElement("div");

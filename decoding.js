@@ -267,23 +267,23 @@ if(tilesEl && answerEl && clueEl && msgEl && scoreEl && newBtn && undoBtn && cle
       setMsg(`Correct! ✅ Word: ${current.word}`);
 
       if(typeof unlockBadge === "function"){
-        unlockBadge("SyllableScout");
+        unlockBadge("syllablescout");
 
         const decodingWins = incrementStat("decodingWins");
         if(decodingWins >= 10){
           unlockBadge("wordbuilder");
         }
         if(decodingWins >= 25){
-          unlockBadge("morphologyMaster");
+          unlockBadge("morphologymaster");
         }
         if(mode === "nightmare"){
           unlockBadge("nightmaresurvivor");
         }
         if(decoysToggle && decoysToggle.checked && mode === "nightmare"){
-          unlockBadge("jabberwockTamer");
+          unlockBadge("jabberwocktamer");
         }
         if(solvedSeconds >= 300){
-          unlockBadge("cosmicPatience");
+          unlockBadge("cosmicpatience");
         }
       }
 
