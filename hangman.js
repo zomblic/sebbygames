@@ -97,6 +97,7 @@ let guessed = new Set();
 let lives = 6;
 let wins = 0;
 let hintShown = false;
+let guessCount = 0;
 
 // Nebula dims with wrong guesses (optional flair)
 const BASE_NEBULA = 0.75;
@@ -169,6 +170,7 @@ function resetRound(keepWord=false){
   guessed = new Set();
   lives = 6;
   hintShown = false;
+ guessCount = 0;
 
   hintEl.textContent = "Hint is hidden. Click “Reveal Hint” if you need it.";
   setMsg("Click letters or use your keyboard.");
@@ -199,6 +201,24 @@ function endLose(){
 function endWin(){
   wins += 1;
   updateHUD();
+
+  const hangmanWins = incrementStat("hangmanWins");
+  if(hangmanWins >= 5){
+    unlockBadge("cosmicEscape");
+  }
+
+  if(lives === 1){
+    unlockBadge("lastchancehero");
+  }
+
+  if(lives === 6){
+    unlockBadge("flawlessguessing");
+  }
+
+  if(guessCount <= 10){
+    unlockBadge("wordwhisperer");
+  }
+
   setMsg("Correct! ✅ New word coming up...");
   setTimeout(()=> resetRound(false), 900);
 }
@@ -206,6 +226,7 @@ function endWin(){
 function guess(ch){
   if(lives <= 0) return;
   if(guessed.has(ch)) return;
+  guessCount += 1;
 
   guessed.add(ch);
 

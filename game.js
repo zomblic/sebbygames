@@ -105,6 +105,9 @@ let started = false;
 let elapsed = 0;
 let timerHandle = null;
 
+let mismatchCount = 0;
+let currentLevel = "normal";
+
 function setMessage(text){ msgEl.textContent = text; }
 function resetTimer(){
   started = false;
@@ -208,10 +211,45 @@ function resetPicks(){
   secondPick = null;
   lock = false;
 }
+
 function winCheck(){
   if(matches !== totalPairs) return;
+
   stopTimer();
   setMessage(`Victory! 🏁 Moves: ${moves} • Time: ${formatTime(elapsed)} • New Game to replay.`);
+
+  unlockBadge("memorySpark");
+
+  const memoryWins = incrementStat("memoryWins");
+  if(memoryWins >= 5){
+    unlockBadge("patternSeeker");
+  }
+
+  if(mismatchCount === 0){
+    unlockBadge("perfectRecall");
+  }
+
+  if(elapsed < 60){
+    unlockBadge("lightningMind");
+  }
+
+  if(currentLevel === "sebby"){
+    unlockBadge("sebbyApproved");
+
+    const sebbyWins = incrementStat("sebbyMemoryWins");
+    if(sebbyWins >= 1){
+      unlockBadge("ridiculousreader");
+    }
+    if(sebbyWins >= 10){
+      unlockBadge("absurdityapprentice");
+    }
+    if(sebbyWins >= 25){
+      unlockBadge("gobbledygookguru");
+    }
+    if(sebbyWins >= 50){
+      unlockBadge("keeperofnonsense");
+    }
+  }
 }
 
 function onFlip(id){
@@ -252,9 +290,10 @@ function onFlip(id){
       resetPicks();
       winCheck();
     }, 280);
-  } else {
-    setMessage("Nope. Flipping back...");
-    setTimeout(() => {
+ } else {
+  mismatchCount += 1;
+  setMessage("Nope. Flipping back...");
+  setTimeout(() => {
       flipUI(firstPick.id, false);
       flipUI(secondPick.id, false);
       setMessage("Try again.");
@@ -266,11 +305,12 @@ function onFlip(id){
 function newGame(){
   const { cols, rows } = parseDifficulty(difficultyEl.value);
 
-  moves = 0;
-  matches = 0;
-  firstPick = null;
-  secondPick = null;
-  lock = false;
+ moves = 0;
+matches = 0;
+mismatchCount = 0;
+firstPick = null;
+secondPick = null;
+lock = false;
 
   resetTimer();
   buildDeck(cols, rows);

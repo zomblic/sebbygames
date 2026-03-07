@@ -8,14 +8,14 @@
 
   // sparkles
   const SPARKLE_COUNT = 20;
-  for(let i=0;i<SPARKLE_COUNT;i++){
+  for(let i = 0; i < SPARKLE_COUNT; i++){
     const s = document.createElement("div");
     s.className = "sparkle";
-    const x = Math.floor(Math.random()*100);
-    const scale = (Math.random()*0.7 + 0.4).toFixed(2);
-    const opacity = (Math.random()*0.35 + 0.15).toFixed(2);
-    const dur = Math.floor(Math.random()*10 + 10);
-    const delay = Math.random()*-dur;
+    const x = Math.floor(Math.random() * 100);
+    const scale = (Math.random() * 0.7 + 0.4).toFixed(2);
+    const opacity = (Math.random() * 0.35 + 0.15).toFixed(2);
+    const dur = Math.floor(Math.random() * 10 + 10);
+    const delay = Math.random() * -dur;
 
     s.style.setProperty("--x", `${x}vw`);
     s.style.setProperty("--s", scale);
@@ -23,7 +23,7 @@
     s.style.setProperty("--dur", `${dur}s`);
     s.style.animationDelay = `${delay}s`;
 
-    const px = Math.floor(Math.random()*4 + 4);
+    const px = Math.floor(Math.random() * 4 + 4);
     s.style.width = `${px}px`;
     s.style.height = `${px}px`;
 
@@ -31,19 +31,20 @@
   }
 
   // parallax
-  let targetX=0, targetY=0, currentX=0, currentY=0;
-  window.addEventListener("mousemove",(e)=>{
-    const w=window.innerWidth, h=window.innerHeight;
-    targetX = (e.clientX/w - 0.5);
-    targetY = (e.clientY/h - 0.5);
-  }, {passive:true});
+  let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+  window.addEventListener("mousemove", (e) => {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    targetX = (e.clientX / w - 0.5);
+    targetY = (e.clientY / h - 0.5);
+  }, { passive: true });
 
   function tick(){
-    currentX += (targetX-currentX)*0.06;
-    currentY += (targetY-currentY)*0.06;
-    starsLayer.style.transform = `translate3d(${currentX*10}px, ${currentY*10}px, 0)`;
-    twinkleLayer.style.transform = `translate3d(${currentX*16}px, ${currentY*16}px, 0)`;
-    nebulaLayer.style.transform = `translate3d(${currentX*22}px, ${currentY*18}px, 0) scale(1.03)`;
+    currentX += (targetX - currentX) * 0.06;
+    currentY += (targetY - currentY) * 0.06;
+    starsLayer.style.transform = `translate3d(${currentX * 10}px, ${currentY * 10}px, 0)`;
+    twinkleLayer.style.transform = `translate3d(${currentX * 16}px, ${currentY * 16}px, 0)`;
+    nebulaLayer.style.transform = `translate3d(${currentX * 22}px, ${currentY * 18}px, 0) scale(1.03)`;
     requestAnimationFrame(tick);
   }
   tick();
@@ -90,8 +91,7 @@ const WORDS = [
   { word: "multiplication", syllables: ["mul", "ti", "pli", "ca", "tion"], clue: "The math operation of times" },
   { word: "classification", syllables: ["clas", "si", "fi", "ca", "tion"], clue: "Sorting into groups" },
   { word: "misbehavior", syllables: ["mis", "be", "hav", "ior"], clue: "Bad behavior" },
-  { word: "reappearance", syllables: ["re", "ap", "pear", "ance"], clue: "Showing up again" },
-  
+  { word: "reappearance", syllables: ["re", "ap", "pear", "ance"], clue: "Showing up again" }
 ];
 
 const NIGHTMARE_WORDS = [
@@ -112,7 +112,7 @@ const NIGHTMARE_WORDS = [
   { word: "compartmentalization", syllables: ["com", "part", "ment", "al", "i", "za", "tion"], clue: "Separating into sections or categories" },
   { word: "disproportionately", syllables: ["dis", "pro", "por", "tion", "ate", "ly"], clue: "In an uneven or unfair amount" },
   { word: "antidisestablishmentarianism", syllables: ["an", "ti", "dis", "es", "tab", "lish", "ment", "ar", "i", "an", "ism"], clue: "A famous very long political word (for fun!)" },
-  { word: "pneumonoultramicroscopicsilicovolcanoconiosis", syllables: ["pneu", "mo", "no", "ul", "tra", "mi", "cro", "scop", "ic", "sil", "i", "co", "vol", "ca", "no", "co", "ni", "o", "sis"], clue: "An extremely long word about a lung disease (for fun!)" },
+  { word: "pneumonoultramicroscopicsilicovolcanoconiosis", syllables: ["pneu", "mo", "no", "ul", "tra", "mi", "cro", "scop", "ic", "sil", "i", "co", "vol", "ca", "no", "co", "ni", "o", "sis"], clue: "An extremely long word about a lung disease (for fun!)" }
 ];
 
 const DECOYS = [
@@ -129,6 +129,8 @@ const clueEl = document.getElementById("clue");
 const msgEl = document.getElementById("msg");
 const scoreEl = document.getElementById("score");
 const modeEl = document.getElementById("mode");
+const decoysToggle = document.getElementById("decoysToggle");
+const nebulaLayer = document.querySelector(".nebula");
 
 const newBtn = document.getElementById("newPuzzle");
 const undoBtn = document.getElementById("undo");
@@ -138,22 +140,37 @@ const checkBtn = document.getElementById("check");
 // If we’re on the menu page, decoding UI won’t exist. Safely exit.
 if(tilesEl && answerEl && clueEl && msgEl && scoreEl && newBtn && undoBtn && clearBtn && checkBtn){
   let current = null;
-  let picked = [];          // syllables chosen
-  let pickedBtns = [];      // button refs
+  let picked = [];
+  let pickedBtns = [];
   let score = 0;
+  let puzzleStartTime = Date.now();
+  let wrong = 0;
+
+  const BASE_NEBULA = 0.75;
+  const DIM_STEP = 0.10;
+  const MIN_NEBULA = 0.08;
+
+  function setNebulaByWrong(){
+    if(!nebulaLayer) return;
+    const next = Math.max(MIN_NEBULA, BASE_NEBULA - wrong * DIM_STEP);
+    nebulaLayer.style.opacity = String(next);
+  }
 
   function shuffle(arr){
-    for(let i=arr.length-1;i>0;i--){
-      const j=Math.floor(Math.random()*(i+1));
-      [arr[i],arr[j]]=[arr[j],arr[i]];
+    for(let i = arr.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
     }
     return arr;
   }
 
-  function setMsg(t){ msgEl.textContent = t; }
+  function setMsg(t){
+    msgEl.textContent = t;
+  }
+
   function renderAnswer(){
     answerEl.innerHTML = "";
-    picked.forEach(syl=>{
+    picked.forEach(syl => {
       const chip = document.createElement("span");
       chip.className = "syllChip";
       chip.style.cursor = "default";
@@ -163,69 +180,64 @@ if(tilesEl && answerEl && clueEl && msgEl && scoreEl && newBtn && undoBtn && cle
   }
 
   function newPuzzle(){
-  const mode = modeEl ? modeEl.value : "normal";
+    const mode = modeEl ? modeEl.value : "normal";
+    const list = mode === "nightmare" ? NIGHTMARE_WORDS : WORDS;
 
-  // Pick word list based on mode
-  const list = (mode === "nightmare") ? NIGHTMARE_WORDS : WORDS;
-  current = list[Math.floor(Math.random() * list.length)];
+    current = list[Math.floor(Math.random() * list.length)];
+    picked = [];
+    pickedBtns = [];
+    puzzleStartTime = Date.now();
+    wrong = 0;
+    setNebulaByWrong();
 
-  picked = [];
-  pickedBtns = [];
+    clueEl.textContent = `Clue: ${current.clue}`;
+    setMsg(
+      mode === "nightmare"
+        ? "Nightmare mode: long words ahead. Decoys appear only if the toggle is on. 👁️"
+        : "Click syllables in order. Undo or clear if needed."
+    );
 
-  clueEl.textContent = `Clue: ${current.clue}`;
-  setMsg(mode === "nightmare"
-    ? "Nightmare mode: decoys included. Choose wisely. 👁️"
-    : "Click syllables in order. Undo or clear if needed."
-  );
-  renderAnswer();
+    renderAnswer();
+    tilesEl.innerHTML = "";
 
-  tilesEl.innerHTML = "";
+    const pool = [...current.syllables];
 
-  // Build tile pool
-const pool = [...current.syllables];
+    if(decoysToggle && decoysToggle.checked){
+      const decoyCount =
+        mode === "nightmare"
+          ? Math.min(10, Math.max(5, Math.floor(current.syllables.length * 0.7)))
+          : (current.syllables.length >= 5 ? 3 : 2);
 
-// Only add decoys if toggle is ON
-if(decoysToggle && decoysToggle.checked){
+      while(pool.length < current.syllables.length + decoyCount){
+        const d = DECOYS[Math.floor(Math.random() * DECOYS.length)];
+        if(!pool.includes(d)) pool.push(d);
+      }
+    }
 
-  const mode = modeEl ? modeEl.value : "normal";
+    const shuffled = shuffle(pool);
 
-  const decoyCount =
-    (mode === "nightmare")
-      ? Math.min(10, Math.max(5, Math.floor(current.syllables.length * 0.7)))
-      : (current.syllables.length >= 5 ? 3 : 2);
+    shuffled.forEach((syl) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "syllChip";
+      b.textContent = syl;
 
-  while(pool.length < current.syllables.length + decoyCount){
-    const d = DECOYS[Math.floor(Math.random() * DECOYS.length)];
-    if(!pool.includes(d)) pool.push(d);
-  }
-}
+      b.addEventListener("click", () => {
+        if(b.classList.contains("used")) return;
+        b.classList.add("used");
+        picked.push(syl);
+        pickedBtns.push(b);
+        renderAnswer();
+      });
 
-  const shuffled = shuffle(pool);
-
-  shuffled.forEach((syl)=>{
-    const b = document.createElement("button");
-    b.type = "button";
-    b.className = "syllChip";
-    b.textContent = syl;
-
-    b.addEventListener("click", ()=>{
-      if(b.classList.contains("used")) return;
-      b.classList.add("used");
-      picked.push(syl);
-      pickedBtns.push(b);
-      renderAnswer();
+      tilesEl.appendChild(b);
     });
-
-    tilesEl.appendChild(b);
-  });
-  if(modeEl){
-  modeEl.addEventListener("change", newPuzzle);
-}
-}
+  }
 
   function undo(){
     const lastBtn = pickedBtns.pop();
-    const lastSyl = picked.pop();
+    picked.pop();
+
     if(lastBtn){
       lastBtn.classList.remove("used");
       renderAnswer();
@@ -237,7 +249,7 @@ if(decoysToggle && decoysToggle.checked){
 
   function clearAll(){
     picked = [];
-    pickedBtns.forEach(b=>b.classList.remove("used"));
+    pickedBtns.forEach(b => b.classList.remove("used"));
     pickedBtns = [];
     renderAnswer();
     setMsg("Cleared.");
@@ -246,14 +258,42 @@ if(decoysToggle && decoysToggle.checked){
   function check(){
     const attempt = picked.join("").toLowerCase();
     const target = current.word.toLowerCase();
+    const mode = modeEl ? modeEl.value : "normal";
+    const solvedSeconds = Math.floor((Date.now() - puzzleStartTime) / 1000);
 
     if(attempt === target){
       score += 1;
       scoreEl.textContent = String(score);
       setMsg(`Correct! ✅ Word: ${current.word}`);
-      // Auto new after a moment
+
+      if(typeof unlockBadge === "function"){
+        unlockBadge("SyllableScout");
+
+        const decodingWins = incrementStat("decodingWins");
+        if(decodingWins >= 10){
+          unlockBadge("wordbuilder");
+        }
+        if(decodingWins >= 25){
+          unlockBadge("morphologyMaster");
+        }
+        if(mode === "nightmare"){
+          unlockBadge("nightmaresurvivor");
+        }
+        if(decoysToggle && decoysToggle.checked && mode === "nightmare"){
+          unlockBadge("jabberwockTamer");
+        }
+        if(solvedSeconds >= 300){
+          unlockBadge("cosmicPatience");
+        }
+      }
+
+      wrong = 0;
+      setNebulaByWrong();
+
       setTimeout(newPuzzle, 900);
     } else {
+      wrong += 1;
+      setNebulaByWrong();
       setMsg(`Not quite. Try again (hint: ${current.word.length} letters).`);
     }
   }
@@ -262,6 +302,14 @@ if(decoysToggle && decoysToggle.checked){
   undoBtn.addEventListener("click", undo);
   clearBtn.addEventListener("click", clearAll);
   checkBtn.addEventListener("click", check);
+
+  if(modeEl){
+    modeEl.addEventListener("change", newPuzzle);
+  }
+
+  if(decoysToggle){
+    decoysToggle.addEventListener("change", newPuzzle);
+  }
 
   newPuzzle();
 }
