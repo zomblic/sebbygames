@@ -2,7 +2,7 @@ const BADGES = [
   {
     id: "nightmaresurvivor",
     name: "Nightmare Survivor",
-    description: "Beat Nightmare mode.",
+    description: "You survived a nightmare!",
     icon: "./assets/badges/nightmaresurvivor.png",
     rarity: "epic"
   },

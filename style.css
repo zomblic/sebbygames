@@ -62,8 +62,8 @@ button, select{
   gap:8px;
 }
 button img{
-  width:48px;
-  height:48px;
+  width: 70px;
+  height:70px;
   object-fit:contain;
 }
 button:hover, select:hover{
