@@ -480,3 +480,148 @@ button:active{ transform:translateY(1px); }
   border-radius:999px;
   background: rgba(255,255,255,0.08);
 }
+
+/* ---------- TRIVIA GAME ---------- */
+
+.triviaWrap{
+  display:grid;
+  gap:24px;
+  text-align:center;
+}
+
+.planetRow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  justify-content:center;
+}
+
+.planetBtn{
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.08);
+  color:var(--text);
+  padding:10px 14px;
+  font-weight:700;
+  cursor:pointer;
+  transition:transform .12s ease, background .2s ease, border-color .2s ease;
+}
+
+.planetBtn:hover{
+  background:rgba(255,255,255,.14);
+  transform:translateY(-2px);
+}
+
+.planetBtn.active{
+  background:rgba(130,150,255,.22);
+  border-color:rgba(180,200,255,.35);
+  box-shadow:0 0 18px rgba(130,150,255,.24);
+}
+
+.constellationPanel{
+  display:grid;
+  gap:10px;
+}
+
+.constellationTitle{
+  font-size:14px;
+  color:var(--muted);
+  text-align:left;
+}
+
+.constellationMap{
+  position:relative;
+  min-height:240px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.05);
+  overflow:hidden;
+}
+
+.mapStar{
+  position:absolute;
+  width:24px;
+  height:24px;
+  border:none;
+  border-radius:50%;
+  cursor:pointer;
+  background:radial-gradient(circle, #fff 0%, #b9cfff 35%, #7b8cff 70%, transparent 100%);
+  box-shadow: 0 0 12px rgba(140,170,255,0.7), 0 0 26px rgba(120,100,255,0.45);
+  transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+}
+
+.mapStar:hover{
+  transform:scale(1.15);
+}
+
+.mapStar.active{
+  box-shadow: 0 0 18px rgba(255,255,255,0.95), 0 0 34px rgba(130,170,255,0.8);
+}
+
+.mapStar.charted{
+  background:radial-gradient(circle, #fff 0%, #b8fff0 35%, #55dcb3 70%, transparent 100%);
+  box-shadow: 0 0 14px rgba(110,255,220,0.8), 0 0 30px rgba(90,220,180,0.55);
+}
+
+.starLink{
+  position:absolute;
+  height:2px;
+  transform-origin:left center;
+  background:linear-gradient(90deg, rgba(160,180,255,0.35), rgba(200,220,255,0.12));
+  pointer-events:none;
+}
+
+.starContainer{
+  display:grid;
+  gap:16px;
+  justify-items:center;
+}
+
+.quizStar{
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 30% 30%, #ffffff, #9ecbff 30%, #5c6cff 70%, transparent);
+  box-shadow:
+    0 0 30px #8aa8ff,
+    0 0 60px #6a6aff,
+    0 0 120px #4d4dff;
+  animation: starPulse 4s infinite alternate;
+  transition: all .3s ease;
+}
+
+@keyframes starPulse{
+  0%{ transform:scale(1); }
+  100%{ transform:scale(1.08); }
+}
+
+.question{
+  font-size:20px;
+  font-weight:700;
+  max-width:700px;
+}
+
+.answers{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
+  margin-top:10px;
+}
+
+.answerBtn{
+  padding:12px 16px;
+  font-size:15px;
+  font-weight:600;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.08);
+  color:white;
+  cursor:pointer;
+  transition:.15s;
+}
+
+.answerBtn:hover{
+  background:rgba(255,255,255,.16);
+  transform:translateY(-2px);
+}

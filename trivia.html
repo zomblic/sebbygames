@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Cosmic Quiz Observatory</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <div class="cosmic-bg">
+    <div class="nebula"></div>
+    <div class="stars" id="starsLayer"></div>
+    <div class="twinkle" id="twinkleLayer"></div>
+    <div class="shooting-stars"></div>
+    <div class="sparkles" id="sparklesLayer"></div>
+  </div>
+
+  <main class="app">
+    <header>
+      <div class="title">
+        <h1>Cosmic Quiz Observatory</h1>
+        <p>Chart stars, explore categories, and answer each glowing question.</p>
+      </div>
+
+      <div class="controls">
+        <button onclick="location.href='./index.html'">Back to Menu</button>
+        <div class="pill">Score <strong id="score">0</strong></div>
+        <div class="pill">Streak <strong id="streak">0</strong></div>
+        <div class="pill">Charted <strong id="charted">0</strong></div>
+
+        <select id="mode">
+          <option value="normal">Normal</option>
+          <option value="sebby">Sebby's Trivia</option>
+          <option value="nightmare">Nightmare</option>
+        </select>
+
+        <button id="resetConstellation" type="button">New Constellation</button>
+      </div>
+    </header>
+
+    <section class="boardWrap triviaWrap">
+
+      <div class="planetRow" id="planetRow">
+        <button class="planetBtn active" data-category="mixed">🌌 Mixed</button>
+        <button class="planetBtn" data-category="vocab">📚 Vocab</button>
+        <button class="planetBtn" data-category="ela">✍️ ELA</button>
+        <button class="planetBtn" data-category="space">🪐 Space</button>
+      </div>
+
+      <div class="constellationPanel">
+        <div class="constellationTitle">Constellation Map</div>
+        <div class="constellationMap" id="constellationMap"></div>
+      </div>
+
+      <div class="starContainer">
+        <div class="quizStar" id="quizStar"></div>
+        <div class="question" id="question">Choose a star to begin.</div>
+      </div>
+
+      <div class="answers" id="answers"></div>
+
+      <div class="toast">
+        <div class="msg" id="msg">Each star contains one question. Chart them all.</div>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="./badges.js"></script>
+  <script src="./trivia.js"></script>
+</body>
+</html>
