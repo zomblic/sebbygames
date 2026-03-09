@@ -548,6 +548,8 @@ button:active{ transform:translateY(1px); }
   background:radial-gradient(circle, #fff 0%, #b9cfff 35%, #7b8cff 70%, transparent 100%);
   box-shadow: 0 0 12px rgba(140,170,255,0.7), 0 0 26px rgba(120,100,255,0.45);
   transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+  transform: translate(-50%, -50%);
+  z-index: 1;
 }
 
 .mapStar:hover{
@@ -569,6 +571,7 @@ button:active{ transform:translateY(1px); }
   transform-origin:left center;
   background:linear-gradient(90deg, rgba(160,180,255,0.35), rgba(200,220,255,0.12));
   pointer-events:none;
+  z-index: 0;
 }
 
 .starContainer{

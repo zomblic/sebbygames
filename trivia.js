@@ -208,6 +208,109 @@ const mapEl = document.getElementById("constellationMap");
 const resetBtn = document.getElementById("resetConstellation");
 const planetBtns = document.querySelectorAll(".planetBtn");
 
+const CONSTELLATION_SHAPES = [
+  {
+    name: "Crown",
+    stars: [
+      { x: 12, y: 28 },
+      { x: 28, y: 18 },
+      { x: 44, y: 28 },
+      { x: 60, y: 18 },
+      { x: 76, y: 28 }
+    ],
+    links: [
+      [0,1],
+      [1,2],
+      [2,3],
+      [3,4]
+    ]
+  },
+
+  {
+    name: "Wand",
+    stars: [
+      { x: 20, y: 60 },
+      { x: 32, y: 48 },
+      { x: 44, y: 36 },
+      { x: 56, y: 24 },
+      { x: 68, y: 14 }
+    ],
+    links: [
+      [0,1],
+      [1,2],
+      [2,3],
+      [3,4]
+    ]
+  },
+
+  {
+    name: "Kite",
+    stars: [
+      { x: 40, y: 18 },
+      { x: 25, y: 42 },
+      { x: 40, y: 66 },
+      { x: 55, y: 42 },
+      { x: 40, y: 42 }
+    ],
+    links: [
+      [0,4],
+      [1,4],
+      [2,4],
+      [3,4],
+      [0,1],
+      [1,2],
+      [2,3],
+      [3,0]
+    ]
+  },
+
+  {
+    name: "Fish",
+    stars: [
+      { x: 16, y: 40 },
+      { x: 30, y: 24 },
+      { x: 48, y: 24 },
+      { x: 62, y: 40 },
+      { x: 48, y: 56 },
+      { x: 30, y: 56 },
+      { x: 74, y: 40 }
+    ],
+    links: [
+      [0,1],
+      [1,2],
+      [2,3],
+      [3,4],
+      [4,5],
+      [5,0],
+      [3,6]
+    ]
+  },
+
+  {
+    name: "Rocket",
+    stars: [
+      { x: 45, y: 12 },
+      { x: 34, y: 28 },
+      { x: 56, y: 28 },
+      { x: 34, y: 52 },
+      { x: 56, y: 52 },
+      { x: 45, y: 68 },
+      { x: 28, y: 72 },
+      { x: 62, y: 72 }
+    ],
+    links: [
+      [0,1],
+      [0,2],
+      [1,3],
+      [2,4],
+      [3,5],
+      [4,5],
+      [5,6],
+      [5,7]
+    ]
+  }
+];
+
 let score = 0;
 let streak = 0;
 let current = null;
@@ -260,12 +363,17 @@ function getQuestionPool(){
 
 function buildConstellation(){
   const pool = shuffle([...getQuestionPool()]);
-  constellation = pool.slice(0, Math.min(8, pool.length));
+
+  currentShape = CONSTELLATION_SHAPES[
+    Math.floor(Math.random() * CONSTELLATION_SHAPES.length)
+  ];
+
+  constellation = pool.slice(0, currentShape.stars.length);
   answered = new Set();
   current = null;
   currentIndex = -1;
 
-  questionEl.textContent = "Choose a star to begin.";
+  questionEl.textContent = `Choose a star to begin. Constellation: ${currentShape.name}`;
   answersEl.innerHTML = "";
   chartedEl.textContent = "0";
   setMsg("Each star contains one question. Chart them all.");
@@ -276,7 +384,29 @@ function buildConstellation(){
 function renderConstellation(){
   mapEl.innerHTML = "";
 
-  constellation.forEach((item, index) => {
+  if(!currentShape) return;
+
+  // draw links first
+  currentShape.links.forEach(([a, b]) => {
+    const starA = currentShape.stars[a];
+    const starB = currentShape.stars[b];
+
+    const dx = starB.x - starA.x;
+    const dy = starB.y - starA.y;
+    const length = Math.sqrt(dx * dx + dy * dy);
+
+    const line = document.createElement("div");
+    line.className = "starLink";
+    line.style.left = `${starA.x}%`;
+    line.style.top = `${starA.y}%`;
+    line.style.width = `${length}%`;
+    line.style.transform = `rotate(${Math.atan2(dy, dx)}rad)`;
+
+    mapEl.appendChild(line);
+  });
+
+  // draw stars
+  currentShape.stars.forEach((pos, index) => {
     const star = document.createElement("button");
     star.type = "button";
     star.className = "mapStar";
@@ -284,35 +414,14 @@ function renderConstellation(){
     if(answered.has(index)) star.classList.add("charted");
     if(index === currentIndex) star.classList.add("active");
 
-    star.style.left = `${10 + (index % 4) * 22}%`;
-    star.style.top = `${15 + Math.floor(index / 4) * 36}%`;
+    star.style.left = `${pos.x}%`;
+    star.style.top = `${pos.y}%`;
 
     star.addEventListener("click", () => {
       loadQuestion(index);
     });
 
     mapEl.appendChild(star);
-
-    if(index < constellation.length - 1){
-      const line = document.createElement("div");
-      line.className = "starLink";
-
-      const x1 = 10 + (index % 4) * 22;
-      const y1 = 15 + Math.floor(index / 4) * 36;
-      const x2 = 10 + ((index + 1) % 4) * 22;
-      const y2 = 15 + Math.floor((index + 1) / 4) * 36;
-
-      const dx = x2 - x1;
-      const dy = y2 - y1;
-      const length = Math.sqrt(dx * dx + dy * dy);
-
-      line.style.left = `${x1 + 3}%`;
-      line.style.top = `${y1 + 3}%`;
-      line.style.width = `${length}%`;
-      line.style.transform = `rotate(${Math.atan2(dy, dx)}rad)`;
-
-      mapEl.appendChild(line);
-    }
   });
 }
 
@@ -361,9 +470,24 @@ function checkAnswer(choice){
     pulseStar("#7df9ff");
 
     if(typeof unlockBadge === "function"){
-      // Existing badge system
+      if(score === 1){
+        unlockBadge("brainspark");
+      }
+
+      if(streak === 5){
+        unlockBadge("starlitstreak");
+      }
+
+      if(answered.size === constellation.length){
+        unlockBadge("cosmicscholar");
+      }
+
       if(modeEl.value === "sebby" && answered.size === constellation.length){
         unlockBadge("sebbysfavorite");
+      }
+
+      if(modeEl.value === "nightmare" && answered.size === constellation.length){
+        unlockBadge("nightwatcher");
       }
     }
 

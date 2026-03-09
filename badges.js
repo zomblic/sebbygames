@@ -180,7 +180,35 @@ const BADGES = [
     description: "Win memory once.",
     icon: "./assets/badges/memorySpark.png",
     rarity: "common"
-  }
+  },
+  {
+  id: "brainspark",
+  name: "Brain Spark",
+  description: "Answer your first trivia question correctly.",
+  icon: "./assets/badges/brainspark.png",
+  rarity: "common"
+},
+{
+  id: "starlitstreak",
+  name: "Starlit Streak",
+  description: "Get 5 trivia questions correct in a row.",
+  icon: "./assets/badges/starlitstreak.png",
+  rarity: "epic"
+},
+{
+  id: "cosmicscholar",
+  name: "Cosmic Scholar",
+  description: "Complete an entire trivia constellation.",
+  icon: "./assets/badges/cosmicscholar.png",
+  rarity: "epic"
+},
+{
+  id: "nightwatcher",
+  name: "Night Watcher",
+  description: "Complete a Nightmare trivia constellation.",
+  icon: "./assets/badges/nightwatcher.png",
+  rarity: "legendary"
+}
 ];
 
 function normalizeBadgeId(id) {
